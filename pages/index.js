@@ -48,10 +48,9 @@ export default function Home() {
             <td colSpan="3" className={styles.tdBottomBorder + ' ' + styles.tdReqTextStyle} >
                 <pre style={{margin: "0px"}}>
                   {
-                      "url: 'http://localhost:4003/api/person/restore' ;\n" +
                       "method:'POST';\n" +
-                      "headers: 'Content-Type', 'application/json';\n" +
-                      "body: JSON.stringify({'login': 'admin','password': '5678'});\n" +
+                      "headers: {'Content-Type': 'application/json'};\n" +
+                      "body: JSON.stringify({\"login\": \"admin\",\"password\": \"5678\"});\n" +
                       "redirect: 'follow'"
                   }
                 </pre>
@@ -71,10 +70,9 @@ export default function Home() {
               <td colSpan="3" className={styles.tdBottomBorder + ' ' + styles.tdReqTextStyle}>
                 <pre style={{margin: "0px"}}>
                   {
-                    "url: 'http://localhost:4003/api/person' ;\n" +
                       "method:'POST';\n" +
-                      "headers: 'Content-Type', 'application/x-www-form-urlencoded';\n" +
-                      "body: '{'firstName':'Ben','lastName':'Rogers','role':'captain'}'\n" +
+                      "headers: {'Content-Type': 'application/x-www-form-urlencoded'};\n" +
+                      "body: {\"firstName\":\"Ben\",\"lastName\":\"Rogers\",\"role\":\"captain\"}\n" +
                       "redirect: 'follow'"
                   }
                 </pre>
@@ -93,7 +91,6 @@ export default function Home() {
               <td colSpan="3" className={styles.tdBottomBorder + ' ' + styles.tdReqTextStyle}>
                 <pre style={{margin: "0px"}}>
                   {
-                      "URL: 'http://localhost:4003/api/person' ;\n" +
                       "method:'GET';\n" +
                       "redirect: 'follow'"
                   }
@@ -113,9 +110,8 @@ export default function Home() {
               <td colSpan="3" className={styles.tdBottomBorder + ' ' + styles.tdReqTextStyle}>
                 <pre style={{margin: "0px"}}>
                   {
-                      "URL: 'http://localhost:4003/api/person/id/1' ;\n" +
                       "method:'GET';\n" +
-                      "redirect: 'follow'\"\""
+                      "redirect: 'follow'"
                   }
                 </pre>
               </td>
@@ -133,11 +129,10 @@ export default function Home() {
               <td colSpan="3" className={styles.tdBottomBorder + ' ' + styles.tdReqTextStyle}>
                 <pre style={{margin: "0px"}}>
                   {
-                      "URL: 'http://localhost:4003/api/person/id/1' ;\n" +
                       "method:'PATCH';\n" +
-                      "headers: 'Content-Type':['application/x-www-form-urlencoded']};\n" +
+                      "headers: {'Content-Type':'application/x-www-form-urlencoded'};\n" +
                       "body: \"{\"firstName\":\"Peter\",\"lastName\":\"Parker\",\"role\":\"spider-man\"}\"\n"+
-                      "redirect: 'follow'\"\""
+                      "redirect: 'follow'"
                   }
                 </pre>
               </td>
@@ -155,9 +150,8 @@ export default function Home() {
               <td colSpan="3" className={styles.tdBottomBorder + ' ' + styles.tdReqTextStyle}>
                 <pre style={{margin: "0px"}}>
                   {
-                      "URL: 'http://localhost:4003/api/person/id/1' ;\n" +
                       "method:'DELETE';\n" +
-                      "redirect: 'follow'\"\""
+                      "redirect: 'follow'"
                   }
                 </pre>
               </td>
@@ -175,9 +169,8 @@ export default function Home() {
               <td colSpan="3" className={styles.tdBottomBorder + ' ' + styles.tdReqTextStyle}>
                 <pre style={{margin: "0px"}}>
                   {
-                      "URL: 'http://localhost:4003/api/person' ;\n" +
                       "method:'DELETE';\n" +
-                      "redirect: 'follow'\"\""
+                      "redirect: 'follow'"
                   }
                 </pre>
               </td>
