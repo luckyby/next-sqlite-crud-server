@@ -1,34 +1,20 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# This is sqlite db server based on Next.js
 
-## Getting Started
 
-First, run the development server:
+### Database "users.db" has table "person" that contains informaition in the following form:
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+![](public/user-db.png)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+### CRUD server has the next endpoints:
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+| Method  |  Endpoint   |    Description | request with:                                                                                                                                                                                                                                       |
+|:--------|-----|-----|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| CREATE  | /api/person/restore   | Restore table "person" to original state | url: 'http://localhost:4003/api/person/restore' ;<br/>method:'POST';<br/>headers: 'Content-Type', 'application/json';<br/>body: JSON.stringify({<br/>&nbsp; &nbsp; 'login': 'admin',<br/>&nbsp; &nbsp; 'password': '5678'});<br/>redirect: 'follow' |
+| CREATE  | /api/person    | Create one person with<br/> firstname, lastname, and role | url: 'http://localhost:4003/api/person' ;<br/>method:'POST';<br/>headers: 'Content-Type', 'application/x-www-form-urlencoded';<br/>body: '{'firstName':'Ben','lastName':'Rogers','role':'captain'}'<br/>redirect: 'follow'                          |
+| READ    | /api/person    | Read all persons    | URL: 'http://localhost:4003/api/person' ;<br/>method:'GET';<br/>redirect: 'follow'                                                                                                                                                                  |
+| READ    | /api/person/id/[id]   | Read one person by id | URL: 'http://localhost:4003/api/person/id/1' ;<br/>method:'GET';<br/>redirect: 'follow'""                                                                                                                                                           |
+| UPDATE  | /api/person/id/[id]   | Update one person by id | URL: 'http://localhost:4003/api/person/id/1' ;<br/>method:'PATCH';<br/>headers: 'Content-Type':['application/x-www-form-urlencoded']};<br/>body: "{"firstName":"Peter","lastName":"Parker","role":"spider-man"}"<br/>redirect: 'follow'""           |
+| DELETE  | /api/person/id/[id]   | Delete one person by id | URL: 'http://localhost:4003/api/person/id/1' ;<br/>method:'DELETE';<br/>redirect: 'follow'""                                                                                                                                                        |
+| DELETE  | /api/person    | Delete all persons    | URL: 'http://localhost:4003/api/person' ;<br/>method:'DELETE';<br/>redirect: 'follow'""                                                                                                                                                             |
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
