@@ -5,11 +5,8 @@ import App from "next/app";
 
 export default function Home() {
 
-
-
-
-
   return (
+
     <>
       <div className={styles.main}>
 
@@ -185,9 +182,12 @@ export default function Home() {
   )
 }
 
-export async function getStaticProps() {
 
-// Data fetching
+export async function getStaticProps(context) {
+
+  const dev = process.env.NODE_ENV !== 'production';
+  const server = dev ? 'http://localhost:4003' : 'https://next-sqlite-crud-server.vercel.app/';
+
   let requestOptions = {
     method: 'POST',
     headers: {"Content-Type": "application/json"},
@@ -195,21 +195,14 @@ export async function getStaticProps() {
     redirect: 'follow'
   };
 
-  const res = await fetch("http://localhost:4003/api/person/restore", requestOptions)
+  const res = await fetch(`${server}/api/person/restore`, requestOptions)
       .then(response => response.text())
       .then(result => {
-        // console.log('result in getInitialProps in _app', result)
       })
       .catch(error => console.log('error', error));
 
-  // const appProps = await App.getInitialProps(appContext)
-
-  // return { ...appProps }
 
   return {
-
-    // data added inside props will be
-    // received by page component as `props`
     props: {},
   };
 }

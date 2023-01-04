@@ -37,6 +37,8 @@ next-env.d.ts
 
 # directory
 .idea/
+src_dump/
+
 
 # files
 README_v1.md
