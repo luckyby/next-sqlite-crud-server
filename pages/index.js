@@ -200,8 +200,8 @@ export async function getStaticProps(context) {
   // console.log('postsDirectory:', postsDirectory)
 
   const dev = process.env.NODE_ENV !== 'production';
-  // const server = dev ? 'http://localhost:4003' : 'https://next-sqlite-crud-server.vercel.app/';
-  const server = dev ? 'http://localhost:4003' : `${process.cwd()}` ;
+  const server = dev ? 'http://localhost:4003' : 'https://next-sqlite-crud-server.vercel.app';
+  // const server = dev ? 'http://localhost:4003' : `${process.cwd()}` ;
 
   let requestOptions = {
     method: 'POST',
