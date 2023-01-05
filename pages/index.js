@@ -1,6 +1,9 @@
 import Image from "next/image";
 import tablePic from '../public/user-db.png';
 import styles from '../styles/Home.module.css'
+// import { promises as fs } from 'fs'
+import path from 'path'
+
 import App from "next/app";
 
 export default function Home() {
@@ -185,8 +188,20 @@ export default function Home() {
 
 export async function getStaticProps(context) {
 
+  // const directory = path
+  // console.log('Object.keys(directory):', Object.keys(directory))
+  // console.log('directory.basename:', directory.basename)
+
+  // const processPWD = process.cwd()
+  // console.log('processPWD:', processPWD)
+  // console.log('typeof processPWD:', typeof processPWD)
+  //
+  // const postsDirectory = path.join(process.cwd(), 'posts')
+  // console.log('postsDirectory:', postsDirectory)
+
   const dev = process.env.NODE_ENV !== 'production';
-  const server = dev ? 'http://localhost:4003' : 'https://next-sqlite-crud-server.vercel.app/';
+  // const server = dev ? 'http://localhost:4003' : 'https://next-sqlite-crud-server.vercel.app/';
+  const server = dev ? 'http://localhost:4003' : `${process.cwd()}` ;
 
   let requestOptions = {
     method: 'POST',
