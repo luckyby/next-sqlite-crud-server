@@ -44,7 +44,7 @@ src_dump/
 README_v1.md
 for_apply_error.js
 package-lock.json
-pages/index_v01.js
+src_dump/index_v01.js
 **/*_v*
 users.db
 **/*try*

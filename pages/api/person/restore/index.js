@@ -7,6 +7,8 @@ import {
     dbRestoreTable
 } from "../../../../lib/handlers";
 
+import { Buffer } from 'node:buffer';
+
 const sqlite3 = require('sqlite3').verbose()
 
 const restore = async  (req, res) => {
@@ -75,7 +77,9 @@ const restore = async  (req, res) => {
 
                 function code(firstname, lastname, role) {
                     const dataStringify = JSON.stringify(firstname + lastname + role)
-                    let buff = new Buffer(dataStringify);
+                    // let buff = new Buffer(dataStringify);
+                    // let buffer = new Buffer();
+                    const buff = Buffer.from(dataStringify)
                     return  buff.toString('base64');
                 }
 

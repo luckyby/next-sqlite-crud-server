@@ -4,10 +4,12 @@ import styles from '../styles/Home.module.css'
 // import { promises as fs } from 'fs'
 import path from 'path'
 
+// import {setTimeout} from "timers/promises";
+
 import App from "next/app";
 
 export default function Home() {
-
+  // console.log('start pages/index.js')
   return (
 
     <>
@@ -186,12 +188,17 @@ export default function Home() {
 }
 
 
-export async function getStaticProps(context) {
-
+export const   getServerSideProps = async ()=>{
+// export async function getStaticProps(context) {
+//   console.log('0 seconds')
+  // await setTimeout(8000)
+  // console.log('after timer(8000)')
   const dev = process.env.NODE_ENV !== 'production';
   // const server = dev ? 'http://localhost:4003' : 'https://next-sqlite-crud-server.vercel.app';
-  const server = dev ? 'http://localhost:4003' : `${process.cwd()}` ;
-
+  const server = dev  ? 'http://localhost:4003' : `${process.cwd()}` ;
+  // const server = dev  ? 'http://localhost:4003' : 'http://localhost:4003' ;
+  const restoreUrl = server + '/api/person/restore'
+  // console.log('restoreUrl:', restoreUrl)
   let requestOptions = {
     method: 'POST',
     headers: {"Content-Type": "application/json"},
@@ -199,7 +206,7 @@ export async function getStaticProps(context) {
     redirect: 'follow'
   };
 
-  const res = await fetch(`${server}/api/person/restore`, requestOptions)
+  const res = await fetch(restoreUrl, requestOptions)
       .then(response => response.text())
       .then(result => {
       })
