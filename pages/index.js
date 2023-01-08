@@ -188,32 +188,32 @@ export default function Home() {
 }
 
 
-export const   getServerSideProps = async ()=>{
-// export async function getStaticProps(context) {
-//   console.log('0 seconds')
-  // await setTimeout(8000)
-  // console.log('after timer(8000)')
-  const dev = process.env.NODE_ENV !== 'production';
-  // const server = dev ? 'http://localhost:4003' : 'https://next-sqlite-crud-server.vercel.app';
-  const server = dev  ? 'http://localhost:4003' : `${process.cwd()}` ;
-  // const server = dev  ? 'http://localhost:4003' : 'http://localhost:4003' ;
-  const restoreUrl = server + '/api/person/restore'
-  // console.log('restoreUrl:', restoreUrl)
-  let requestOptions = {
-    method: 'POST',
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify({'login': 'admin','password': '5678'}),
-    redirect: 'follow'
-  };
-
-  const res = await fetch(restoreUrl, requestOptions)
-      .then(response => response.text())
-      .then(result => {
-      })
-      .catch(error => console.log('error', error));
-
-
-  return {
-    props: {},
-  };
-}
+// export const   getServerSideProps = async ()=>{
+// // export async function getStaticProps(context) {
+// //   console.log('0 seconds')
+//   // await setTimeout(8000)
+//   // console.log('after timer(8000)')
+//   const dev = process.env.NODE_ENV !== 'production';
+//   // const server = dev ? 'http://localhost:4003' : 'https://next-sqlite-crud-server.vercel.app';
+//   const server = dev  ? 'http://localhost:4003' : `${process.cwd()}` ;
+//   // const server = dev  ? 'http://localhost:4003' : 'http://localhost:4003' ;
+//   const restoreUrl = server + '/api/person/restore'
+//   // console.log('restoreUrl:', restoreUrl)
+//   let requestOptions = {
+//     method: 'POST',
+//     headers: {"Content-Type": "application/json"},
+//     body: JSON.stringify({'login': 'admin','password': '5678'}),
+//     redirect: 'follow'
+//   };
+//
+//   const res = await fetch(restoreUrl, requestOptions)
+//       .then(response => response.text())
+//       .then(result => {
+//       })
+//       .catch(error => console.log('error', error));
+//
+//
+//   return {
+//     props: {},
+//   };
+// }
