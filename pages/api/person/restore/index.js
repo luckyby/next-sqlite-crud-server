@@ -122,12 +122,10 @@ const restore = async  (req, res) => {
                 });
             }
         default:
-            // res.setHeaders("Allow", ["POST"]);
-            // res.setHeaders("Allow", ["GET"]);
+            res.setHeader("Allow", ["POST"]);
             return res
                 .status(405)
-                .json({ success: false })
-                .end(`Method ${method} Not Allowed`);
+                .json({ success: false, "message": `Method ${method} Not Allowed` })
     }
 }
 

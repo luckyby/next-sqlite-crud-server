@@ -100,11 +100,11 @@ export default async (req, res) => {
                 });
             }
         default:
-            res.setHeaders("Allow", ["GET", "POST", "DELETE"]);
+            res.setHeader("Allow", ["GET", "POST", "DELETE"]);
             return res
                 .status(405)
-                .json({ success: false })
-                .end(`Method ${method} Not Allowed`);
+                .json({ success: false, "message": `Method ${method} Not Allowed` })
+                // .end(`Method ${method} Not Allowed`);
     }
 }
 

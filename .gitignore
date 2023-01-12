@@ -48,3 +48,4 @@ src_dump/index_v01.js
 **/*_v*
 users.db
 **/*try*
+yarn.lock

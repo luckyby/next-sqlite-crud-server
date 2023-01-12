@@ -112,11 +112,10 @@ const reqById = async (req, res) => {
             }
 
         default:
-            res.setHeaders("Allow", ["GET", "PUT", "PATCH", "DELETE"]);
+            res.setHeader("Allow", ["GET", "PATCH", "DELETE"]);
             return res
                 .status(405)
-                .json({ success: false })
-                .end(`Method ${method} Not Allowed`);
+                .json({ success: false, "message": `Method ${method} Not Allowed` })
     }
 
     // console.log('row in get by id crud server', row)
