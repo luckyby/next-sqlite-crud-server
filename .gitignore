@@ -46,6 +46,6 @@ for_apply_error.js
 package-lock.json
 src_dump/index_v01.js
 **/*_v*
-users.db
+#users.db
 **/*try*
 yarn.lock

@@ -107,4 +107,3 @@ export default async (req, res) => {
                 // .end(`Method ${method} Not Allowed`);
     }
 }
-
