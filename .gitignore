@@ -49,3 +49,4 @@ src_dump/index_v01.js
 #users.db
 **/*try*
 yarn.lock
+.eslintrc.json
