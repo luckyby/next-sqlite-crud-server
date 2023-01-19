@@ -15,7 +15,7 @@ const reqById = async (req, res) => {
 
     if(row.length === 0){
         // console.log('Table is empty.')
-        return res.status(200).json({"message:":`Table is empty. No person with the id ${id}`});
+        return res.status(200).json({"message:":`No person with the id ${id}`});
     }
     switch (method) {
         case "GET":
