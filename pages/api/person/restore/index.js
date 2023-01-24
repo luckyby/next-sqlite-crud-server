@@ -11,24 +11,13 @@ import { Buffer } from 'node:buffer';
 
 const sqlite3 = require('sqlite3').verbose()
 
-const restore = async  (req, res) => {
-// console.log('', process.env.)
-//     console.log('req in begin RESTORE', req)
+const Restore = async  (req, res) => {
     const reqBody = req.body
-    // console.log('reqBody = ', reqBody )
-    // console.log('reqBodyStringify = ', JSON.stringify(reqBody) )
     const login = reqBody['login']
-    // console.log('login = ', login)
     const password = reqBody['password']
-    // console.log('password = ', password)
-
     const loginAdmin = process.env.ADMIN_LOGIN
-    // console.log('loginAdmin = ', loginAdmin)
     const loginPassword = process.env.ADMIN_PASSWORD
-    // console.log('loginPassword = ', loginPassword)
-
     const method = req.method;
-    // console.log('method:', method);
 
     if( login!==loginAdmin || password!==loginPassword){
         return (
@@ -36,8 +25,6 @@ const restore = async  (req, res) => {
         )
     }
 
-    // let sql;
-    // let params;
     switch (method) {
         case "POST":
             try {
@@ -77,8 +64,6 @@ const restore = async  (req, res) => {
 
                 function code(firstname, lastname, role) {
                     const dataStringify = JSON.stringify(firstname + lastname + role)
-                    // let buff = new Buffer(dataStringify);
-                    // let buffer = new Buffer();
                     const buff = Buffer.from(dataStringify)
                     return  buff.toString('base64');
                 }
@@ -106,7 +91,6 @@ const restore = async  (req, res) => {
 
                 await dbRestoreTable(db, sqlRestoreTable)
 
-
                 const sqlReadAll = `SELECT id, firstname, lastname, role FROM person`
                 let data = await dbReadAllData(db, sqlReadAll)
 
@@ -129,4 +113,4 @@ const restore = async  (req, res) => {
     }
 }
 
-export default restore
+export default Restore

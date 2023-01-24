@@ -8,10 +8,8 @@ import {
 
 const sqlite3 = require("sqlite3").verbose();
 
-export default async (req, res) => {
-
+const Person = async (req, res) => {
     const method = req.method;
-    // console.log('method = ', method)
     switch (method) {
         case "GET":
             try {
@@ -24,7 +22,6 @@ export default async (req, res) => {
 
                 return data
                     ? res.status(200).json(data)
-                    // : res.end(`No person with the lastname ${lastname}`);
                     : res.end(`Database don't return any data`);
 
             }catch (e) {
@@ -107,3 +104,5 @@ export default async (req, res) => {
                 // .end(`Method ${method} Not Allowed`);
     }
 }
+
+export default Person
