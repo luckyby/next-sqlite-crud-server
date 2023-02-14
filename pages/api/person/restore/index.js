@@ -97,7 +97,7 @@ const Restore = async  (req, res) => {
                 await dbCloseConnection(db)
 
                 return res
-                    ? res.status(200).json(data)
+                    ? res.status(200).json({"seccess": "true", "message": "data in table 'person' recreated", "data": data})
                     : res.end(`Ooops! Table was not restored`);
 
             } catch (error) {
@@ -109,7 +109,10 @@ const Restore = async  (req, res) => {
             res.setHeader("Allow", ["POST"]);
             return res
                 .status(405)
-                .json({ success: false, "message": `Method ${method} Not Allowed` })
+                .json({  "success": false,
+                    "message": `Method ${method} Not Allowed`,
+                    "data": []
+                })
     }
 }
 

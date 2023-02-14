@@ -10,11 +10,17 @@ const PersonById = async (req, res) => {
 
     const sqlGetById = `SELECT id, firstname, lastname, role FROM person WHERE id = ${id}`
     let row = await dbReadAllData(db, sqlGetById)
-
+    // console.log('row before start PersonBy id = ', row)
+    // console.log('row.length = ', row.length )
     if(row.length === 0){
-        // console.log('Table is empty.')
-        return res.status(200).json({"message:":`No person with the id ${id}`});
+        // console.log('in if after read all in start')
+        return res.status(422).json({
+            "seccess": false,
+            "message:":`Does not exist row with the id=${id} in table 'person'`,
+            "data": null
+        });
     }
+    // console.log('before switch')
     switch (method) {
         case "GET":
             await dbCloseConnection(db)
@@ -22,12 +28,16 @@ const PersonById = async (req, res) => {
             return res
                     .setHeader('Content-Type', 'application/json')
                     .status(200)
-                    .json([{
-                        "id": `${id}`,
-                        "firstname": `${row[0].firstname}`,
-                        "lastname": `${row[0].lastname}`,
-                        "role": `${row[0].role}`
-                    }])
+                    .json({
+                        "seccess": "true",
+                        "message": "data read by id in table 'person'",
+                        "data": [{
+                            "id": `${id}`,
+                            "firstname": `${row[0].firstname}`,
+                            "lastname": `${row[0].lastname}`,
+                            "role": `${row[0].role}`
+                            }]
+                    })
         case "PUT":
             try {
                 let data = {
@@ -40,7 +50,7 @@ const PersonById = async (req, res) => {
                 let buff = new Buffer(dataStringify);
                 let base64data = buff.toString('base64');
 
-                let sqlPatchById =  `UPDATE person
+                let sqlPutById =  `UPDATE person
                             SET firstname="${data.firstname}",
                                 lastname ="${data.lastname}",
                                 role     ="${data.role}",
@@ -49,7 +59,7 @@ const PersonById = async (req, res) => {
 
                 try {
                     await new Promise((resolve, reject) => {
-                        db.run(sqlPatchById, function (err) {
+                        db.run(sqlPutById, function (err) {
                             if (err) {
                                 return res.status(400).json({ error: err.message });
                             }else {
@@ -61,7 +71,7 @@ const PersonById = async (req, res) => {
                     console.log('error:', e.message)
                 }
 
-                const sqlReadById = `SELECT id, firstname, lastname, role FROM person WHERE id = ${id}`
+                const sqlReadById = `SELECT id, firstname, lastname, role FROM person WHERE id = ${id};`
                 let row = await dbReadAllData(db, sqlReadById)
 
                 await dbCloseConnection(db)
@@ -70,10 +80,16 @@ const PersonById = async (req, res) => {
                         res
                             .status(200)
                             .json({
-                                "id": `${id}`,
-                                "firstname": `${row[0].firstname}`,
-                                "lastname": `${row[0].lastname}`,
-                                "role": `${row[0].role}`
+                                "secsess": true,
+                                "message": "data updated by id in table 'person'",
+                                "data": [
+                                    {
+                                        "id": `${id}`,
+                                        "firstname": `${row[0].firstname}`,
+                                        "lastname": `${row[0].lastname}`,
+                                        "role": `${row[0].role}`
+                                    }
+                                ]
                             })
                         : res
                             .json({
@@ -86,31 +102,46 @@ const PersonById = async (req, res) => {
                 });
             }
         case "DELETE":
+            // console.log('row in personById = ', row)
+            const sqlDeleteById = `DELETE FROM person WHERE id=${id};`
             try {
-                const sqlDeleteById = `DELETE FROM person WHERE id=${id}`
-
                 await dbDeleteAllData(db, sqlDeleteById)
-
-                await dbCloseConnection(db)
-
-                return (
-                    res?
-                        res.status(200).json({"message": `deleted row with id=${id} in table 'person'`})
-                        : res.json({"message":`No person with the id=${id}`})
-                )
-
-            } catch (e) {
-                return res.status(400).json({
-                    inCatch: true,
-                    success: false,
-                });
+            }catch (e) {
+                console.log('error in dbDeleteAllData in delete by id', e)
             }
 
+
+            const sqlGetById = `SELECT id, firstname, lastname, role FROM person WHERE id = ${id}`
+            const row = await dbReadAllData(db, sqlGetById)
+            try {
+                await dbCloseConnection(db)
+            }catch (e) {
+                console.log('error in dbReadAllData in delete by id', e)
+            }
+
+            if(row.length === 0){
+                return  res.status(200).json({
+                    "seccess": true,
+                    "message": `data deleted by id=${id} in table 'person'`,
+                    "data": row
+
+                })
+            }
+
+            return res.json({
+                "seccess": false,
+                "message": `data not deleted by id=${id} in table 'person'`,
+                "data": row
+            })
         default:
             res.setHeader("Allow", ["GET", "PUT", "DELETE"]);
             return res
                 .status(405)
-                .json({ success: false, "message": `Method ${method} Not Allowed in sqlite server API` })
+                .json({
+                    success: false,
+                    "message": `Method ${method} Not Allowed in sqlite server API`,
+                    "data": []
+                })
     }
 };
 

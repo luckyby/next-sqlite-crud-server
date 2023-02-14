@@ -57,7 +57,7 @@ import styles from '../styles/Home.module.css'
                   {
                       "method:'POST';\n" +
                       "headers: {'Content-Type': 'application/x-www-form-urlencoded'};\n" +
-                      "body: {\"firstName\":\"Ben\",\"lastName\":\"Rogers\",\"role\":\"captain\"}\n" +
+                      "body: {\"firstname\":\"Ben\",\"lastname\":\"Rogers\",\"role\":\"captain\"}\n" +
                       "redirect: 'follow'"
                   }
                 </pre>
@@ -116,7 +116,7 @@ import styles from '../styles/Home.module.css'
                   {
                       "method:'PUT';\n" +
                       "headers: {'Content-Type':'application/x-www-form-urlencoded'};\n" +
-                      "body: \"{\"firstName\":\"Peter\",\"lastName\":\"Parker\",\"role\":\"spider-man\"}\"\n"+
+                      "body: \"{\"firstname\":\"Peter\",\"lastname\":\"Parker\",\"role\":\"spider-man\"}\"\n"+
                       "redirect: 'follow'"
                   }
                 </pre>

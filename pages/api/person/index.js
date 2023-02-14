@@ -19,9 +19,11 @@ const Person = async (req, res) => {
                 let data= await dbReadAllData(db, sqlReadAllPersons)
 
                 await dbCloseConnection(db)
-
+                if(data.length === 0){
+                    data = [{"seccess": "true", "message": "table 'person' is empty", "data": [null]}]
+                }
                 return data
-                    ? res.status(200).json(data)
+                    ? res.status(200).json({"seccess": "true", "message": "all data in table 'person'", "data": data})
                     : res.end(`Database don't return any data`);
 
             }catch (e) {
@@ -39,36 +41,80 @@ const Person = async (req, res) => {
                     role: req.body.role
                 };
 
-                const dataStringify = JSON.stringify(data.firstname + data.lastname + data.role)
+                let dataStringify = JSON.stringify(data.firstname + data.lastname + data.role)
                 let buff = new Buffer(dataStringify);
                 let base64data = buff.toString('base64');
-
-                const sqlCreateOnePerson = `INSERT 
+                const sqlGetBycode = `SELECT id, firstname, lastname, role FROM person WHERE code = "${base64data}";`
+                // console.log('sqlGetBycode = ', sqlGetBycode)
+                let row
+                try {console.log('sqlGetBycode before row = ', sqlGetBycode)
+                    row = await dbReadAllData(db, sqlGetBycode)
+                    // console.log('row in post in person/index', row)
+                }catch (e) {
+                    console.error(e)
+                }
+                if(row.length === 0){
+                    const sqlCreateOnePerson = `INSERT 
                             INTO person (firstname, lastname, role, code) 
-                            VALUES ("${data.firstname}","${data.lastname}","${data.role}", "${base64data}")`;
-                await dbCreateOnePerson(db, sqlCreateOnePerson)
+                            VALUES ("${data.firstname}","${data.lastname}","${data.role}", "${base64data}");`;
+                    // console.log('sqlCreateOnePerson = ', sqlCreateOnePerson)
+                    const createdPersonInfo = await dbCreateOnePerson(db, sqlCreateOnePerson)
 
-                let sqlReadPesonByCode = `SELECT 
+                    let sqlReadPersonByCode = `SELECT 
                             id, 
                             firstname, 
                             lastname, 
                             role 
                        FROM person 
                        WHERE code="${base64data}"`;
-                let getData = await dbReadAllData(db, sqlReadPesonByCode)
+                    let createdPerson = await dbReadAllData(db, sqlReadPersonByCode)
+                    // console.log('createdPerson = ', createdPerson)
 
-                await dbCloseConnection(db)
+                    await dbCloseConnection(db)
 
-                return res
-                    ? res.status(200).json(getData)
-                    : res.end(`No person with the lastname ${lastname}`);
+                    return res.status(200).json(
+                        {
+                            "seccess": true,
+                            "message": "in table 'person'was created row with data",
+                            "data": createdPerson
+                        }
+                    )
+                }
+
+                let dataReaded = {
+                    firstname: row[0].firstname,
+                    lastname: row[0].lastname,
+                    role: row[0].role
+                }
+                dataStringify = JSON.stringify(dataReaded.firstname + dataReaded.lastname + dataReaded.role)
+                buff = new Buffer(dataStringify);
+                let base64dataReaded = buff.toString('base64');
+                // console.log('base64dataReaded = ', base64dataReaded)
+                if(base64data === base64dataReaded){
+                    return res.status(422).json(
+                        {
+                            "seccess": false,
+                            "message": `person with this data already exists`,
+                            "data": {
+                                "id": row[0].id,
+                                "firstname": row[0].firstname,
+                                "lastname": row[0].lastname,
+                                "role": row[0].role
+                            }
+                        }
+                    )
+                }
+
 
 
             }catch (e) {
                 return res.status(400).json({
-                    success: false,
+                    "success": false,
+                    "message": "error after try post one person",
+                    "data": null
                 });
             }
+            break
         case "DELETE":
             try {
                 let db = await dbOpenConnection(sqlite3)
@@ -89,18 +135,28 @@ const Person = async (req, res) => {
                 await dbCloseConnection(db)
 
                 return res
-                    ? res.status(200).json({"message": "table 'person' is empty"})
+                    ? res.status(200).json({
+                        "seccess": true,
+                        "message": "all rows deleted in table 'person'",
+                        "data": []
+                    })
                     : res.end(`No person with the lastname ${lastname}`);
             } catch (error) {
                 return res.status(400).json({
-                    success: false,
+                    "success": false,
+                    "message": "cann't delete all rows in table 'person'",
+                    "data": null
                 });
             }
         default:
             res.setHeader("Allow", ["GET", "POST", "DELETE"]);
             return res
                 .status(405)
-                .json({ success: false, "message": `Method ${method} Not Allowed` })
+                .json({
+                    "success": false,
+                    "message": `Method ${method} not allowed in sqlite server API`,
+                    "data": []
+                })
                 // .end(`Method ${method} Not Allowed`);
     }
 }
