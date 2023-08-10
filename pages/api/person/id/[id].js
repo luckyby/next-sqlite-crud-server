@@ -15,7 +15,7 @@ const PersonById = async (req, res) => {
     if(row.length === 0){
         // console.log('in if after read all in start')
         return res.status(422).json({
-            "seccess": false,
+            "success": false,
             "message:":`Does not exist row with the id=${id} in table 'person'`,
             "data": null
         });
@@ -29,7 +29,7 @@ const PersonById = async (req, res) => {
                     .setHeader('Content-Type', 'application/json')
                     .status(200)
                     .json({
-                        "seccess": "true",
+                        "success": "true",
                         "message": "data read by id in table 'person'",
                         "data": [{
                             "id": `${id}`,
@@ -67,8 +67,8 @@ const PersonById = async (req, res) => {
                             }
                         });
                     });
-                }catch (e) {
-                    console.log('error:', e.message)
+                }catch (error) {
+                    console.log('error:', error.message)
                 }
 
                 const sqlReadById = `SELECT id, firstname, lastname, role FROM person WHERE id = ${id};`
@@ -80,7 +80,7 @@ const PersonById = async (req, res) => {
                         res
                             .status(200)
                             .json({
-                                "secsess": true,
+                                "success": true,
                                 "message": "data updated by id in table 'person'",
                                 "data": [
                                     {
@@ -106,8 +106,8 @@ const PersonById = async (req, res) => {
             const sqlDeleteById = `DELETE FROM person WHERE id=${id};`
             try {
                 await dbDeleteAllData(db, sqlDeleteById)
-            }catch (e) {
-                console.log('error in dbDeleteAllData in delete by id', e)
+            }catch (error) {
+                console.log('error in dbDeleteAllData in delete by id', error)
             }
 
 
@@ -115,13 +115,13 @@ const PersonById = async (req, res) => {
             const row = await dbReadAllData(db, sqlGetById)
             try {
                 await dbCloseConnection(db)
-            }catch (e) {
-                console.log('error in dbReadAllData in delete by id', e)
+            }catch (error) {
+                console.log('error in dbReadAllData in delete by id', error)
             }
 
             if(row.length === 0){
                 return  res.status(200).json({
-                    "seccess": true,
+                    "success": true,
                     "message": `data deleted by id=${id} in table 'person'`,
                     "data": row
 
@@ -129,7 +129,7 @@ const PersonById = async (req, res) => {
             }
 
             return res.json({
-                "seccess": false,
+                "success": false,
                 "message": `data not deleted by id=${id} in table 'person'`,
                 "data": row
             })

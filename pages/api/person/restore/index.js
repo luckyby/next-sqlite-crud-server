@@ -29,10 +29,10 @@ const Restore = async  (req, res) => {
         case "POST":
             try {
                 let db = await dbOpenConnection(sqlite3)
-
+                // console.log('after dbOpenConnection in POST in restore localhost:4003')
                 const sqlDropTable= "DROP TABLE IF EXISTS person"
                 await dbDropTable(db, sqlDropTable)
-
+                // console.log('after dbDropTable in POST in restore localhost:4003')
                 const sqlCreateTable = "CREATE TABLE " +
                                             "IF NOT EXISTS person " +
                                                 "(" +
@@ -97,7 +97,7 @@ const Restore = async  (req, res) => {
                 await dbCloseConnection(db)
 
                 return res
-                    ? res.status(200).json({"seccess": "true", "message": "data in table 'person' recreated", "data": data})
+                    ? res.status(200).json({"success": "true", "message": "data in table 'person' recreated", "data": data})
                     : res.end(`Ooops! Table was not restored`);
 
             } catch (error) {

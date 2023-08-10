@@ -12,18 +12,21 @@ const Person = async (req, res) => {
     const method = req.method;
     switch (method) {
         case "GET":
+            // console.log('*****')
             try {
                 let db = await dbOpenConnection(sqlite3)
 
                 const sqlReadAllPersons = "SELECT id, firstname, lastname, role FROM person";
                 let data= await dbReadAllData(db, sqlReadAllPersons)
+                // console.log('data = ', data)
 
                 await dbCloseConnection(db)
                 if(data.length === 0){
-                    data = [{"seccess": "true", "message": "table 'person' is empty", "data": [null]}]
+                    data = [{"success": "true", "message": "table 'person' is empty", "data": [null]}]
                 }
-                return data
-                    ? res.status(200).json({"seccess": "true", "message": "all data in table 'person'", "data": data})
+                // console.log('data =', data)
+                return (data.length > 0)
+                    ? res.status(200).json({"success": "true", "message": "all data in table 'person'", "data": data})
                     : res.end(`Database don't return any data`);
 
             }catch (e) {
@@ -47,7 +50,8 @@ const Person = async (req, res) => {
                 const sqlGetBycode = `SELECT id, firstname, lastname, role FROM person WHERE code = "${base64data}";`
                 // console.log('sqlGetBycode = ', sqlGetBycode)
                 let row
-                try {console.log('sqlGetBycode before row = ', sqlGetBycode)
+                try {
+                    // console.log('sqlGetBycode before row = ', sqlGetBycode)
                     row = await dbReadAllData(db, sqlGetBycode)
                     // console.log('row in post in person/index', row)
                 }catch (e) {
@@ -74,7 +78,7 @@ const Person = async (req, res) => {
 
                     return res.status(200).json(
                         {
-                            "seccess": true,
+                            "success": true,
                             "message": "in table 'person'was created row with data",
                             "data": createdPerson
                         }
@@ -93,7 +97,7 @@ const Person = async (req, res) => {
                 if(base64data === base64dataReaded){
                     return res.status(422).json(
                         {
-                            "seccess": false,
+                            "success": false,
                             "message": `person with this data already exists`,
                             "data": {
                                 "id": row[0].id,
@@ -117,30 +121,72 @@ const Person = async (req, res) => {
             break
         case "DELETE":
             try {
-                let db = await dbOpenConnection(sqlite3)
+                let db
+                try {
+                    db = await dbOpenConnection(sqlite3)
+                }catch (error) {
+                    console.log("cann't open db connection")
+                    return res.status(405).json({
+                        "success": false,
+                        "message": "cann't open db connection",
+                        "data": []
+                    })
+                }
 
-                const sqlDropTable= "DROP TABLE IF EXISTS person"
-                await dbDropTable(db, sqlDropTable)
+                try {
+                    const sqlDropTable= "DROP TABLE IF EXISTS person"
+                    const droped = await dbDropTable(db, sqlDropTable)
+                    // console.log('droped =', droped)
+                }catch (error) {
+                    console.log("cann't drop table 'person'")
+                    return res.status(405).json({
+                        "success": false,
+                        "message": "cann't drop table 'person'",
+                        "data": []
+                    })
+                }
 
-                const sqlCreateTable = "CREATE TABLE " +
-                                    "IF NOT EXISTS " +
-                    "                               person (" +
-                    "                                       id INTEGER PRIMARY KEY, " +
-                    "                                       firstname TEXT, " +
-                    "                                       lastname TEXT, " +
-                    "                                       role TEXT, " +
-                    "                                       code TEXT UNIQUE)"
-                await dbCreateTable(db, sqlCreateTable)
+                // const sqlDropTable= "DROP TABLE IF EXISTS person"
+                // const droped = await dbDropTable(db, sqlDropTable)
+                // console.log('droped =', droped)
 
-                await dbCloseConnection(db)
+                try {
+                    const sqlCreateTable = "CREATE TABLE " +
+                        "IF NOT EXISTS " +
+                        "                               person (" +
+                        "                                       id INTEGER PRIMARY KEY, " +
+                        "                                       firstname TEXT, " +
+                        "                                       lastname TEXT, " +
+                        "                                       role TEXT, " +
+                        "                                       code TEXT UNIQUE)"
+                    await dbCreateTable(db, sqlCreateTable)
+                }catch (error) {
+                    console.log("cann't create table 'person'")
+                    return res.status(405).json({
+                        "success": false,
+                        "message": "cann't create table 'person'",
+                        "data": []
+                    })
+                }
 
-                return res
-                    ? res.status(200).json({
-                        "seccess": true,
+                try {
+                    await dbCloseConnection(db)
+                }catch (error) {
+                    console.log("cann't close db connection")
+                    return res.status(405).json({
+                        "success": false,
+                        "message": "cann't close db connection",
+                        "data": []
+                    })
+                }
+
+
+                return res.status(200).json({
+                        "success": true,
                         "message": "all rows deleted in table 'person'",
                         "data": []
                     })
-                    : res.end(`No person with the lastname ${lastname}`);
+
             } catch (error) {
                 return res.status(400).json({
                     "success": false,
